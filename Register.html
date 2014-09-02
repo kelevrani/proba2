@@ -1,0 +1,116 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1 charset=utf-8">
+<link rel="stylesheet" href="jquery.mobile-1.4.3.min.css">
+<script src="jquery-2.1.1.min.js"></script>
+<script src="jquery.mobile-1.4.3.min.js"></script>
+	<style type="text/css">
+
+	
+	.ui-content{
+	width:50%;
+	margin: 0 auto;
+	height:50%;
+    margin-top:50px;
+	
+	
+	}
+	
+	
+	
+	
+	</style>
+<script>
+
+
+
+function Kontrole(){
+var username=document.getElementById("user").value;
+var password=document.getElementById("pass1").value;
+var password2=document.getElementById("pass2").value;
+var email=document.getElementById("mail").value;
+
+if (username.length<6) {
+	$(document).ready(function() {
+
+		$("#meldung").text('Ihr Username muss aus mindestens 6 Zeichen bestehen.');
+		});
+
+$(document).ready(function(){$("#myPopup").popup("open");});
+
+}
+else if (password!=password2){$(document).ready(function() {
+
+    $("#meldung").text('Passwort stimmt nicht überein!');
+});
+
+$(document).ready(function(){$("#myPopup").popup("open");});}
+else if (password.length < 6) {$(document).ready(function() {
+
+    $("#meldung").text('Ihr Passwort muss aus mindestens 6 Zeichen bestehen.');
+});
+
+$(document).ready(function(){$("#myPopup").popup("open");});}
+
+else{
+
+$.getJSON("http://hsduell2014.net84.net/UserRegistration.php?callback=?&user="+username+"&pass="+password+"&email="+email, function(data){
+   if (data.a=='True') {window.location.replace("quiz.html");}
+   else if (data.a=='False') {$(document).ready(function() {
+
+    $("#meldung").text('User existiert bereits!');
+});
+   
+   $(document).ready(function(){$("#myPopup").popup("open");});}
+});
+}
+
+
+}
+</script>
+<title>HSQuiz</title>
+<link rel="stylesheet" type="text/css" href="css.css" ></link>
+</head >
+
+<body onload="loadXMLDoc()">
+	<div data-role="page" id="pageone">
+  <div data-role="header" data-fullscreen="true" data-position="fixed">
+    <h1>Register</h1>
+  </div>
+  
+ 
+
+  <div data-role="main" class="ui-content">
+	<p>Username</p>
+	<input type="text" id="user"></input>
+	<p>Password</p>
+	<input type="password" id="pass1"></input>
+	<p>Password Bestätigung</p>
+	<input type="password" id="pass2"></input>
+	<p>E-Mail</p>
+	<input type="text" id="mail"></input>
+	<button class="ui-btn" onClick="Kontrole()" >Register</button>
+	<div id="myPopup" data-role="popup" id="popupBasic">
+	<p id="meldung"><p>
+</div>
+
+
+
+
+
+  <div  data-role="footer" data-fullscreen="true" data-position="fixed">
+    <h1>HSDuell</h1>
+  </div>
+</div> 
+	
+
+	
+	
+ 
+
+</body>
+</html>

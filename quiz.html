@@ -1,0 +1,233 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1 charset=utf-8">
+<link rel="stylesheet" href="jquery.mobile-1.4.3.min.css">
+<script src="jquery-2.1.1.min.js"></script>
+<script src="jquery.mobile-1.4.3.min.js"></script>
+
+	<style type="text/css">
+
+	
+	#myDiv{
+	width:350px;
+	margin:0 auto;
+	
+	
+	}
+	
+	#myDiv2{
+	width:350px;
+	margin:0 auto;
+	
+	
+	}
+	
+	.ui-content{
+	width:50%;
+	margin: 0 auto;
+	height:50%;
+    margin-top:50px;
+	
+	
+	}
+	
+	
+	
+	
+	</style>
+<script>
+
+var gegners= new Array();
+
+if (localStorage.getItem( 'gegnerst' )!=null){
+gegners=JSON.parse( localStorage.getItem( 'gegnerst' ));
+
+
+}
+
+
+
+
+
+function beimstart(){
+
+for (var i=0; i<gegners.length; i++){
+   
+   var txt3 = $('<button></button>').attr('id','gegner'+i);
+   $(txt3).text(gegners[i]);
+   $(txt3).attr('onClick','spielenich()');
+   $('#buttoncon').append(txt3);
+   
+   }
+   
+   if (localStorage.getItem('gegnerwarten')!=null){
+   
+   var txt2 = $('<button></button>').attr('id','gegnerwarten');
+   $(txt2).text('Warten auf Spieler!');
+   $(txt2).attr('onClick','spielenich()');
+   $('#buttoncon').append(txt2);
+   
+   }
+   
+}
+
+
+
+
+
+
+
+function proof(){
+
+var username= $("#user").val();
+var password= $("#pass1").val();
+
+$.getJSON("http://hsduell2014.net84.net/UserProofing.php?callback=?&user="+username+"&pass="+password, function(data){
+   if (data.state=='False') {$(document).ready(function() {
+
+    $("#meldung").text('Username oder Passwort ist falsch!');
+	
+});
+$(document).ready(function(){$("#myPopup").popup("open");});
+}
+
+else if (data.state=='True') {
+			localStorage.userauth=data.user; 
+			localStorage.passauth=data.pass;
+			window.location.replace("#pagetwo");
+			
+
+
+    }
+   
+});
+
+
+}
+
+function searchop(){
+
+$.getJSON("http://hsduell2014.net84.net/findopponent.php?callback=?&user="+localStorage.userauth+"&pass="+localStorage.passauth, function(data){
+   
+   
+   
+   if (data.gegner1=='Empty') {
+   
+   localStorage.setItem('gegnerwarten', data.gegner1);
+   
+   var txt2 = $('<button></button>').attr('id','gegnerwarten');
+   $(txt2).text('Warten auf Spieler!');
+   $(txt2).attr('onClick','spielenich()');
+   $('#buttoncon').append(txt2);
+   gegnerabfrage();
+   
+   }
+   
+   
+   else if(data.gegner1=='Wait'){alert('Warten Sie auf ihren Gegner');}
+   
+   else {
+   gegners[gegners.length]=data.gegner1;
+   localStorage.setItem('gegnerst',JSON.stringify(gegners));
+   
+   
+   
+   var txt2 = $('<button></button>').attr('id','gegnerwarten');
+   $(txt2).text(gegners[gegners.length-1]);
+   $(txt2).attr('onClick','spielenich()');
+   $('#buttoncon').append(txt2);
+   
+   
+   
+   
+   
+   
+   }
+
+   
+});
+
+}
+
+function spielenich(){alert('spielenich');}
+
+function spielengegner(){alert('spielengegner');}
+
+
+	
+	
+</script>
+
+<title>HSQuiz</title>
+<link rel="stylesheet" type="text/css" href="css.css" ></link>
+</head >
+
+<body onLoad="beimstart()">
+	<div data-role="page" id="pageone">
+		<div data-role="header" data-fullscreen="true" data-position="fixed">
+			<h1>Anmelden</h1>
+		</div>
+
+		<div data-role="main" class="ui-content">
+		
+			<p>Username</p>
+			<input type="text" id="user"></input>
+			<p>Password</p>
+			<input type="password" id="pass1"></input>
+			<button onClick="proof()">Anmelden</button>
+			<div id="myPopup" data-role="popup" id="popupBasic">
+				<p id="meldung"><p>
+			</div>
+		</div>
+
+		<div data-role="footer" data-fullscreen="true" data-position="fixed">
+			<h1>Insert Footer Text Here</h1>
+		</div>
+	</div> 
+	
+	<div data-role="page" id="pagetwo">
+		<div data-role="header" data-fullscreen="true" data-position="fixed">
+			<h1>HSDuell</h1>
+		</div>
+
+		<div data-role="main" id="buttoncon" class="ui-content">
+			
+			<button id="search" onClick="searchop()">Spieler suchen</button>
+			
+	
+		</div>
+
+		<div data-role="footer" data-fullscreen="true" data-position="fixed" >
+			<h1>HSDuell</h1>
+		</div>
+	</div> 
+	
+	<div data-role="page" id="pagethree">
+		<div data-role="header" data-fullscreen="true" data-position="fixed">
+			<h1>HSDuell</h1>
+		</div>
+
+		<div data-role="main" class="ui-content">
+			<h1></h1>
+	<input type="button" value="" onClick="rezultat()">
+	<input type="button" value="" onClick="rezultatf()">
+	<input type="button" value="" onClick="rezultatf()">
+	<input type="button" value="" onClick="rezultatf()">
+		</div>
+
+		<div data-role="footer" data-fullscreen="true" data-position="fixed" >
+			<h1>HSDuell</h1>
+		</div>
+	</div> 
+	
+	
+	
+
+	
+	
+ 
+
+</body>
+</html>
